@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pasar de bloques a código</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f3e9fb; max-width: 500px; margin: 30px auto; padding: 0 15px; }
+    h1 { color: #d6307f; text-align: center; }
+    #chat { background: white; border-radius: 10px; padding: 15px; min-height: 150px; margin-bottom: 15px; }
+    #chat p { margin: 6px 0; }
+    .sistema { color: #7a2fb5; font-weight: bold; }
+    .usuario { color: #333; }
+    input { width: 65%; padding: 8px; font-size: 16px; }
+    button { padding: 8px 14px; font-size: 16px; background: #d6307f; color: white; border: none; border-radius: 6px; cursor: pointer; }
+  </style>
+</head>
+<body>
+
+  <h1>Pasar de bloques a código</h1>
+  <div id="chat"></div>
+  <input type="text" id="entrada" placeholder="Escribe aquí...">
+  <button id="boton">Enviar</button>
+
+  <script>
+    // Variables del programa
+    var paso = 1;       // En qué paso del programa vamos
+    var name = "";      // Aquí se guarda el nombre
+
+    var chat = document.getElementById("chat");
+    var entrada = document.getElementById("entrada");
+    var boton = document.getElementById("boton");
+
+    // Función para mostrar mensajes (equivale a print)
+    function mostrar(texto, clase) {
+      var p = document.createElement("p");
+      p.className = clase;
+      p.textContent = texto;
+      chat.appendChild(p);
+    }
+
+    // Paso 1: Preguntar el nombre (equivale al primer input)
+    mostrar("What's your name?", "sistema");
+
+    function enviar() {
+      var texto = entrada.value.trim();
+
+      // Si el programa ya terminó, el botón reinicia la página
+      if (paso === 3) {
+        location.reload();
+        return;
+      }
+
+      if (texto === "") {
+        return;
+      }
+
+      mostrar(texto, "usuario");
+      entrada.value = "";
+
+      if (paso === 1) {
+        name = texto;
+
+        // Paso 2: Saludar usando el nombre
+        mostrar("Hi " + name, "sistema");
+
+        // Paso 3: Preguntar si está bien
+        mostrar("Are you OK " + name + "?", "sistema");
+        paso = 2;
+
+      } else if (paso === 2) {
+        var answer = texto;
+
+        // Paso 4: Evaluar la respuesta
+        if (answer.toLowerCase() === "yes") {
+          // Disfraz feliz (simulado con mensaje)
+          mostrar("[Changing costume to nano-c]", "sistema");
+          mostrar("That's great to hear!", "sistema");
+        } else {
+          // Disfraz triste (simulado con mensaje)
+          mostrar("[Changing costume to nano-d]", "sistema");
+          mostrar("Oh no!", "sistema");
+        }
+
+        paso = 3;
+        boton.textContent = "Reiniciar";
+        entrada.disabled = true;
+      }
+    }
+
+    boton.addEventListener("click", enviar);
+    entrada.addEventListener("keydown", function (e) {
+      if (e.key === "Enter") { enviar(); }
+    });
+  </script>
+
+</body>
+</html>
